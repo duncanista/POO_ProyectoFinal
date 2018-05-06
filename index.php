@@ -1,18 +1,11 @@
 <?php
 require_once 'config/Conexion.php';
 require_once 'classes/Categoria.php';
-require_once 'classes/Proveedor.php';
 require_once 'classes/Usuario.php';
 require_once 'classes/Producto.php';
 require_once 'classes/Venta.php';
-require_once 'classes/Compra.php';
-require_once 'classes/DetalleVenta.php';
-require_once 'classes/DetalleCompra.php';
-
 header("Content-Type:application/json");
-
 $type = $_SERVER["REQUEST_METHOD"];
-
 if (isset($_GET['PATH_INFO'])){
   $request = explode('/', $_GET['PATH_INFO']);
   $resource = array_shift($request);
@@ -26,7 +19,6 @@ else {
   $response["message"] = $message;
   echo json_encode($response);
 }
-
 switch ($type) {
   case 'GET':
   switch ($resource) {
@@ -37,15 +29,6 @@ switch ($type) {
       }
       else {
         $cat->select($id);
-      }
-      break;
-    case 'proveedor':
-      $proveedor = new Proveedor;
-      if(!isset($id)){
-        $proveedor->selectAll();
-      }
-      else {
-        $proveedor->select($id);
       }
       break;
     case 'usuario':
@@ -75,35 +58,7 @@ switch ($type) {
         $venta->select($id);
       }
       break;
-    case 'compra':
-      $compra = new Compra;
-      if(!isset($id)){
-        $compra->selectAll();
-      }
-      else {
-        $compra->select($id);
-      }
-      break;
-    case 'detalleCompra':
-      $detalleCompra = new DetalleCompra;
-      if(!isset($id)){
-        $detalleCompra->selectAll();
-      }
-      else {
-        $detalleCompra->select($id);
-      }
-      break;
-    case 'detalleVenta':
-      $detalleVenta = new DetalleVenta;
-      if(!isset($id)){
-        $detalleVenta->selectAll();
-      }
-      else {
-        $detalleVenta->select($id);
-      }
-      break;
     default:
-
       break;
   }
     break;
@@ -114,10 +69,6 @@ switch ($type) {
           case 'categoria':
             $cat = new Categoria;
             $cat->insert($JSONObject->nombre, $JSONObject->descripcion);
-            break;
-          case 'proveedor':
-            $proveedor = new Proveedor;
-            $proveedor->insert($JSONObject->nombre, $JSONObject->direccion);
             break;
           case 'usuario':
             $usuario = new Usuario;
@@ -130,21 +81,8 @@ switch ($type) {
             break;
           case 'venta':
             $venta = new Venta;
-            $venta->insert($JSONObject->fecha, $JSONObject->total, $JSONObject->pago, $JSONObject->cambio, $JSONObject->idUsuario);
+            $venta->insert($JSONObject->fecha, $JSONObject->total, $JSONObject->idUsuario);
             break;
-          case 'compra':
-            $compra = new Compra;
-            $compra->insert($JSONObject->fecha, $JSONObject->total, $JSONObject->pago, $JSONObject->cambio, $JSONObject->idProveedor);
-            break;
-          case 'detalleCompra':
-            $detalleCompra = new DetalleCompra;
-            $detalleCompra->insert($JSONObject->cantidad, $JSONObject->idCompra, $JSONObject->idProducto);
-            break;
-          case 'detalleVenta':
-            $detalleVenta = new DetalleVenta;
-            $detalleVenta->insert($JSONObject->cantidad, $JSONObject->idVenta, $JSONObject->idProducto);
-            break;
-
           default:
             # code...
             break;
@@ -165,33 +103,17 @@ switch ($type) {
                 $cat = new Categoria;
                 $cat->update($id,$JSONObject->nombre, $JSONObject->descripcion);
                 break;
-              case 'proveedor':
-                $proveedor = new Proveedor;
-                $proveedor->update($id, $JSONObject->nombre, $JSONObject->direccion);
-                break;
               case 'usuario':
                 $usuario = new Usuario;
-                $usuario->update($id, $JSONObject->nombre, $JSONObject->contrasena, $JSONObject->tipo);
+                $usuario->update($id, $JSONObject->nombre, $JSONObject->puesto, $JSONObject->sueldo);
                 break;
               case 'producto':
                 $producto = new Producto;
-                $producto->update($id, $JSONObject->nombre, $JSONObject->descripcion, $JSONObject->precio, $JSONObject->idCategoria);
+                $producto->update($id, $JSONObject->nombre, $JSONObject->cantidad, $JSONObject->precio, $JSONObject->idCategoria);
                 break;
               case 'venta':
                 $venta = new Venta;
-                $venta->update($id, $JSONObject->fecha, $JSONObject->total, $JSONObject->pago, $JSONObject->cambio, $JSONObject->idUsuario);
-                break;
-              case 'compra':
-                $compra = new Compra;
-                $compra->update($id, $JSONObject->fecha, $JSONObject->total, $JSONObject->pago, $JSONObject->cambio, $JSONObject->idProveedor);
-                break;
-              case 'detalleCompra':
-                $detalleCompra = new DetalleCompra;
-                $detalleCompra->update($id,$JSONObject->cantidad, $JSONObject->idCompra, $JSONObject->idProducto);
-                break;
-              case 'detalleVenta':
-                $detalleVenta = new DetalleVenta;
-                $detalleVenta->update($id,$JSONObject->cantidad, $JSONObject->idVenta, $JSONObject->idProducto);
+                $venta->update($id, $JSONObject->fecha, $JSONObject->total, $JSONObject->idUsuario);
                 break;
               default:
                 // code...
@@ -216,10 +138,6 @@ switch ($type) {
           $cat = new Categoria;
           $cat->delete($id);
           break;
-        case 'proveedor':
-          $proveedor = new Proveedor;
-          $proveedor->delete($id);
-          break;
         case 'usuario':
           $usuario = new Usuario;
           $usuario->delete($id);
@@ -232,18 +150,6 @@ switch ($type) {
           $venta = new Venta;
           $venta->delete($id);
           break;
-        case 'compra':
-          $compra = new Compra;
-          $compra->delete($id);
-          break;
-        case 'detalleCompra':
-          $detalleCompra = new DetalleCompra;
-          $detalleCompra->delete($id);
-          break;
-        case 'detalleVenta':
-          $detalleVenta = new DetalleVenta;
-          $detalleVenta->delete($id);
-          break;
         default:
           // code...
           break;
@@ -253,11 +159,9 @@ switch ($type) {
       $cat = new Proveedor;
       $cat->error("Error: no id!");
     }
-
     break;
   default:
     # code...
     break;
 }
-
 ?>
