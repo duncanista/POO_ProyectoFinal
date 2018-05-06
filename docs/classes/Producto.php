@@ -1,11 +1,9 @@
 <?php require_once 'config/Conexion.php';
-
 Class Producto{
-
   function __construct(){
   }
   function selectAll(){
-    $sql = "SELECT * FROM Producto";
+    $sql = "SELECT Producto.idProducto, Producto.nombre, Producto.cantidad, Producto.precio, Producto.idCategoria, Categoria.nombre, Categoria.descripcion FROM Producto INNER JOIN Categoria ON Producto.idCategoria=Categoria.idCategoria";
     $response = array();
     if($result = simpleQuery($sql)){
       $response["status"] = 200;
@@ -20,7 +18,6 @@ Class Producto{
   function select($id){
     $sql = "SELECT * FROM Producto WHERE idProducto = $id";
     $response = array();
-
     if($result = simpleQuery($sql)){
       if($result->num_rows <= 0){
         http_response_code(400);
@@ -33,7 +30,6 @@ Class Producto{
       $response["message"] = "Successful";
       $response["datos"] = $result->fetch_assoc();
       echo json_encode($response);
-
     }
   else {
     http_response_code(400);
