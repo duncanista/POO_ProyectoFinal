@@ -3,7 +3,7 @@ Class Producto{
   function __construct(){
   }
   function selectAll(){
-    $sql = "SELECT Producto.idProducto, Producto.nombre, Producto.cantidad, Producto.precio, Producto.idCategoria, Categoria.nombre, Categoria.descripcion FROM Producto INNER JOIN Categoria ON Producto.idCategoria=Categoria.idCategoria";
+    $sql = "SELECT Producto.idProducto, Producto.nombreP, Producto.cantidad, Producto.precio, Producto.idCategoria, Categoria.nombreC, Categoria.descripcion FROM Producto INNER JOIN Categoria ON Producto.idCategoria=Categoria.idCategoria";
     $response = array();
     if($result = simpleQuery($sql)){
       $response["status"] = 200;
