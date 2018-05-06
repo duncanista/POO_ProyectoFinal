@@ -10,9 +10,9 @@ Class Venta{
     if($result = simpleQuery($sql)){
       $response["status"] = 200;
       $response["message"] = "";
-      $datos = array();
+      $response["datos"] = array();
       while($row = $result->fetch_assoc()){
-          array_push($datos, $row);
+          array_push($response["datos"], $row);
       }
       echo json_encode($datos);
     }
