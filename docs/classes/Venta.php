@@ -14,7 +14,7 @@ Class Venta{
       while($row = $result->fetch_assoc()){
           array_push($response["datos"], $row);
       }
-      echo json_encode($datos);
+      echo json_encode($response);
     }
   }
   function select($id){
